@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Блог — пост</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1 id="blog-title"></h1>
+    <span id="blog-meta"></span>
+  </header>
+  <main id="blog-content"></main>
+  <p><a href="/">Назад к списку</a></p>
+
+  <script>
+    const path = window.location.pathname;
+    const id = path.replace('/', '');
+    fetch('/blogs/blogs.json')
+      .then(r => r.json())
+      .then(items => {
+        const b = items.find(x => String(x.id) === id);
+        if (!b) {
+          document.body.innerHTML = '<p>Пост не найден</p>';
+          return;
+        }
+        document.getElementById('blog-title').textContent = b.title;
+        document.getElementById('blog-meta').textContent = b.date
+        document.getElementById('blog-content').innerText = b.content;
+      });
+  </script>
+</body>
+</html>

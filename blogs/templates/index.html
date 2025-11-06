@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Блог — список статей</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Блог каких-то статей</h1>
+  </header>
+  <main id="main">
+    <ul id="blog-list">
+
+    </ul>
+  </main>
+  <script>
+    fetch('/blogs/blogs.json')
+      .then(r => r.json())
+      .then(items => {
+        const ul = document.getElementById('blog-list');
+        items.forEach(b => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = '/' + b.id;
+          a.textContent = b.title + ' — ' + b.date;
+          li.appendChild(a);
+          const p = document.createElement('p');
+          p.textContent = b.summary;
+          li.appendChild(p);
+          ul.appendChild(li);
+
+        });
+      });
+  </script>
+</body>
+</html>

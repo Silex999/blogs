@@ -13,25 +13,94 @@
     <ul id="blog-list">
 
     </ul>
+  <div style="display: flex;justify-content: space-around;">
+      <form style="font-size: 12px;width: 50%;display: flex;flex-direction: column;" id="dataForm">
+        <span style="color: #fff;display: flex;justify-content: space-around; font-size: 16px;">Добавить новую запись</span>
+        
+        <label style="font-size: 14px;">Заголовок</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="title" required></textarea>
+        
+        <label style="font-size: 14px;">Дата</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="date" required></textarea>
+        
+        <label style="font-size: 14px;">Краткое описание</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="summary" required></textarea>
+        
+        <label style="font-size: 14px;">Полное описание</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="content" required></textarea>
+        
+        <button style="margin: 5px;background-color: #576f8f;color: #fff;border: none;padding: 10px; border-radius: 5px; margin-top: 10px;" type="submit">Отправить</button>
+        <div class="msg" id="status"></div>
+      </form>
+    </div>
   </main>
   <script>
-    fetch('/blogs/blogs.json')
-      .then(r => r.json())
-      .then(items => {
-        const ul = document.getElementById('blog-list');
-        items.forEach(b => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = '/' + b.id;
-          a.textContent = b.title + ' — ' + b.date;
-          li.appendChild(a);
-          const p = document.createElement('p');
-          p.textContent = b.summary;
-          li.appendChild(p);
-          ul.appendChild(li);
 
+  </script>
+  <script>
+    function loadBlogs() {
+      fetch('/blogs/blogs.json')
+        .then(r => r.json())
+        .then(items => {
+          const ul = document.getElementById('blog-list');
+          ul.innerHTML = '';
+          
+          items.forEach(b => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '/' + b.id;
+            a.textContent = b.title + ' — ' + b.date;
+            li.appendChild(a);
+            
+            const p = document.createElement('p');
+            p.textContent = b.summary;
+            li.appendChild(p); 
+            ul.appendChild(li);
+          });
+        })
+        .catch(error => {
+          console.error('Ошибка загрузки блогов:', error);
+          document.getElementById('status').textContent = 'Ошибка загрузки блогов';
         });
+    }
+
+    document.getElementById('dataForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const data = {
+        title: formData.get('title'),
+        date: formData.get('date'),
+        summary: formData.get('summary'),
+        content: formData.get('content'),
+        id: Date.now().toString()
+      };
+
+      const statusElement = document.getElementById('status');
+
+      fetch('/api/add-blog', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Ошибка сервера');
+        }
+        return response.json();
+      })
+      .then(result => {
+        document.getElementById('dataForm').reset();
+        loadBlogs();
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
       });
+    });
+
+    document.addEventListener('DOMContentLoaded', loadBlogs);
   </script>
 </body>
 </html>

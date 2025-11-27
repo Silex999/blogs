@@ -77,7 +77,7 @@ class MyHandler(SimpleHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'application/json; charset=utf-8')
             self.end_headers()
-            response = json.dumps({"success": True, "message": "Блог добавлен успешно", "id": new_id})
+            response = json.dumps({"success": True, "message": "Блог успешно добавлен", "id": new_id})
             self.wfile.write(response.encode('utf-8'))
             
         except Exception as e:

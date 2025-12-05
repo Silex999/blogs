@@ -23,6 +23,15 @@ class MyHandler(SimpleHTTPRequestHandler):
 
         return super().do_GET()
 
+    def do_POST(self):
+        parse = urlparse(self.path)
+        path = parse.path
+
+        if path == '/api/add-blog':
+            return self.add_blog()
+        else:
+            self.send_error(404)
+
     def add_blog(self):
         try:
             content_length = int(self.headers['Content-Length'])

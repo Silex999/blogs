@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Блог — список статей</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Блог каких-то статей</h1>
+  </header>
+  <main id="main">
+    <ul id="blog-list">
+      {{BLOG_LIST}}
+    </ul>
+    <div style="display: flex;justify-content: space-around;">
+      <form style="font-size: 12px;width: 50%;display: flex;flex-direction: column;" method="POST" action="/add-blog">
+        <span style="color: #fff;display: flex;justify-content: space-around; font-size: 16px;">Добавить новую запись</span>
+        
+        <label style="font-size: 14px;">Заголовок</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="title" required></textarea>
+        
+        <label style="font-size: 14px;">Дата</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="date" required></textarea>
+        
+        <label style="font-size: 14px;">Краткое описание</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="summary" required></textarea>
+        
+        <label style="font-size: 14px;">Полное описание</label>
+        <textarea style="margin: 5px;border: none;border-radius: 2px;" name="content" required></textarea>
+        
+        <button style="margin: 5px;background-color: #576f8f;color: #fff;border: none;padding: 10px; border-radius: 5px; margin-top: 10px;" type="submit">Отправить</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
